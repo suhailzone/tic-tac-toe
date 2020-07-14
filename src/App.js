@@ -4,7 +4,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Card, CardBody, Container, Button, Row, Col } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.css";
-import { AiOutlineReload } from "react-icons/ai";
+import {
+  AiOutlineReload,
+  AiOutlineUser,
+  AiOutlineUsergroupAdd,
+  AiOutlineArrowLeft,
+} from "react-icons/ai";
 import "./App.css";
 
 const itemArray = new Array(9).fill("empty");
@@ -12,6 +17,7 @@ const itemArray = new Array(9).fill("empty");
 const App = () => {
   const [isCross, setIsCross] = useState(false);
   const [winMessage, setWinMessage] = useState("");
+  const [dualPlayer, setDualPlayer] = useState(null);
 
   const reloadGame = () => {
     setIsCross(false);
@@ -106,7 +112,7 @@ const App = () => {
       // console.log(turns);
       setIsCross(!isCross);
       checkIsWinner();
-      if (!checkIsWinner()) {
+      if (!checkIsWinner() && dualPlayer === false) {
         setTimeout(() => {
           cpuTurns();
         }, 1000);
@@ -130,14 +136,19 @@ const App = () => {
       itemArray[randomIndex] = isCross ? "circle" : "cross";
       // console.log(turns);
       setIsCross(isCross);
-      getUI();
+      getSPUI();
       checkIsWinner();
     } else {
       cpuTurns();
     }
   };
 
-  const getUI = () => {
+  const handleHome = () => {
+    setDualPlayer(null);
+    reloadGame();
+  };
+
+  const getSPUI = () => {
     // console.log(isCross ? "Cross" : "Circle");
     return (
       <div className="grid">
@@ -156,30 +167,72 @@ const App = () => {
     <Container className="p-5">
       <h1 className="text-center text-white">Tic Tac Toe</h1>
       <ToastContainer position="bottom-center" />
-      <Row>
-        <Col md={6} className="offset-md-3">
-          {winMessage ? (
-            <div className="mb-2 mt-2">
-              <h2 className="text-success text-center text-uppercase">
-                {winMessage}
-              </h2>
-              <Button block onClick={reloadGame} color="info">
-                <AiOutlineReload style={{ margin: "0 10px" }} />
-                Reload Game
+      {dualPlayer === null ? (
+        <div>
+          <Row>
+            <Col md={6} className="offset-md-3 mt-5">
+              <Button
+                block
+                size="lg"
+                color="info"
+                onClick={() => setDualPlayer(false)}
+              >
+                <AiOutlineUser style={{ margin: "0 10px" }} />
+                Single Player
               </Button>
-            </div>
-          ) : (
-            <div>
-              {isCross ? (
-                <h2 className="mb-5 text-center text-primary">Cross Turns</h2>
-              ) : (
-                <h2 className="mb-5 text-center text-warning">Circle Turns</h2>
-              )}
-            </div>
-          )}
-          <div>{getUI()}</div>
-        </Col>
-      </Row>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={6} className="offset-md-3 mt-5">
+              <Button
+                block
+                color="primary"
+                size="lg"
+                onClick={() => setDualPlayer(true)}
+              >
+                <AiOutlineUsergroupAdd style={{ margin: "0 10px" }} />
+                Dual Player
+              </Button>
+            </Col>
+          </Row>
+        </div>
+      ) : (
+        <Row>
+          <Col md={6} className="offset-md-3">
+            {winMessage ? (
+              <div className="mb-2 mt-2">
+                <h2 className="text-success text-center text-uppercase">
+                  {winMessage}
+                </h2>
+                <Button block onClick={reloadGame} color="info">
+                  <AiOutlineReload style={{ margin: "0 10px" }} />
+                  Reload Game
+                </Button>
+              </div>
+            ) : (
+              <div>
+                {isCross ? (
+                  <h2 className="mb-5 text-center text-primary">Cross Turns</h2>
+                ) : (
+                  <h2 className="mb-5 text-center text-warning">
+                    Circle Turns
+                  </h2>
+                )}
+              </div>
+            )}
+            {getSPUI()}
+
+            <Row>
+              <Col md={6} className="offset-md-3 mt-5">
+                <Button block onClick={handleHome} color="danger">
+                  <AiOutlineArrowLeft style={{ margin: "0 10px" }} />
+                  Back to Home
+                </Button>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      )}
       <p className="mt-5 text-white text-center">github.com/suhailzone</p>
     </Container>
   );
