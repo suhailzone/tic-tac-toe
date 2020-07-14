@@ -223,7 +223,7 @@ const App = () => {
             {getSPUI()}
 
             <Row>
-              <Col md={6} className="offset-md-3 mt-5">
+              <Col md={6} className="offset-md-3 mt-3">
                 <Button block onClick={handleHome} color="danger">
                   <AiOutlineArrowLeft style={{ margin: "0 10px" }} />
                   Back to Home
@@ -233,7 +233,7 @@ const App = () => {
           </Col>
         </Row>
       )}
-      <p className="mt-5 text-white text-center">github.com/suhailzone</p>
+      <p className="mt-2 text-white text-center">github.com/suhailzone</p>
     </Container>
   );
 };
